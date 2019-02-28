@@ -30,7 +30,8 @@ void draw() {
 	if(keyPressed){
 		switch(key){
 			case 'r':
-						gol.init();
+						//gol.init();
+						gol.initCellBoard();
 						break;
 			default:
 						println("Press 'r' to restart");

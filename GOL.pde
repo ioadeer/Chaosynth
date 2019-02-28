@@ -9,8 +9,10 @@ class GOL {
   int columns, rows;
 //	An example of the application of the transition rules to one neuron. Assume
 //  that P = {0, 1, 2, 3, 4}, r 1 = 8.5, r 2 = 5.2 and k = 3.
+// ejemplo de Cellular_Automata_Music_From_Sound_Synth.pdf
   // Game of life board
   int[][] board;
+	Cell[][] cellBoard;
 	float r1, r2;
 	float k; // capacitance of the nerve cell
 	int states;	
@@ -20,15 +22,25 @@ class GOL {
     columns = width/w;
     rows = height/w;
     board = new int[columns][rows];
+		cellBoard = new Cell[columns][rows];
 		states = 15;
-		r1 = 8.5;
-		r2 = 5.2;
+		r1 = 1.5; // 8.5
+		r2 = 2.2; // 5.2
 		k  = 3;
     //next = new int[columns][rows];
     // Call function to fill array with random values 0 or 1
     init();
+		initCellBoard();
   }
 
+	void initCellBoard(){
+
+    for (int i =0;i < columns;i++) {
+      for (int j =0;j < rows;j++) {
+				cellBoard[i][j] = new Cell(int(random(1,4)), int(random(states-1)));
+      }
+    }
+}
   void init() {
     for (int i =0;i < columns;i++) {
       for (int j =0;j < rows;j++) {
@@ -41,7 +53,13 @@ class GOL {
   // The process of creating the new generation
   void generate() {
 
-    int[][] next = new int[columns][rows];
+    //int[][] next = new int[columns][rows];
+		Cell[][] nextCellBoard = new Cell[columns][rows];	
+		for(int i =0; i < columns; i++){
+			for(int j = 0; j < rows; j++){
+				nextCellBoard[i][j] = new Cell();
+			}
+		}
 
 
     // Loop through every spot in our 2D array and check spots neighbors
@@ -63,32 +81,39 @@ class GOL {
 						int rowReminder= (y+j)%rows;
 						lookUpCol = colReminder <= -1 ? columns + colReminder : colReminder;
 						lookUpRow = rowReminder <= -1 ? rows + rowReminder : rowReminder;
-						degreeOfPolarization += board[lookUpCol][lookUpRow]; // corresponde al valor de polarizacion
-						if(board[lookUpCol][lookUpRow] > 0)
+						//degreeOfPolarization += cellBoard[lookUpCol][lookUpRow].state; // corresponde al valor de polarizacion
+						degreeOfPolarization += cellBoard[lookUpCol][lookUpRow].state; // corresponde al valor de polarizacion
+						if(cellBoard[lookUpCol][lookUpRow].state > 0)
 							numberOfPolarizedCells++;
-						if(board[lookUpCol][lookUpRow] == (states-1))
+						if(cellBoard[lookUpCol][lookUpRow].state == (states-1))
 							numberOfBurnedCells++;
           }
         }
 
         // A little trick to subtract the current cell's state since
         // we added it in the above loop
-        degreeOfPolarization -= board[x][y]; 
+        //degreeOfPolarization -= board[x][y]; 
+        degreeOfPolarization -= cellBoard[x][y].state; 
 
         // Rules of Life
         //if      ((board[x][y] == 1) && (neighbors <  2)) next[x][y] = 0;           // Loneliness
         //else if ((board[x][y] == 1) && (neighbors >  3)) next[x][y] = 0;           // Overpopulation
         //else if ((board[x][y] == 0) && (neighbors == 3)) next[x][y] = 1;           // Reproduction
         //else                                            next[x][y] = board[x][y];  // Stasis
-				//Rules of ChaosSynth
-				if(board[x][y] == 0) next[x][y] = int(numberOfPolarizedCells/r1) + int(numberOfBurnedCells/r2);
-				else if((board[x][y] > 0) && (board[x][y] < (states -1))) next[x][y] = int(k) + int(degreeOfPolarization/numberOfPolarizedCells);
-				else if(board[x][y] == states -1) next[x][y] = 0;	
+				//DE Granular Synthesis of Sounds by Means of a Cellular Automaton pag 298
+				//Rules of ChaosSynth 
+				//if(board[x][y] == 0) next[x][y] = int(numberOfPolarizedCells/r1) + int(numberOfBurnedCells/r2);
+				//else if((board[x][y] > 0) && (board[x][y] < (states -1))) next[x][y] = int(k) + int(degreeOfPolarization/numberOfPolarizedCells);
+				//else if(board[x][y] == states -1) next[x][y] = 0;	
+				// Cell Object
+				if(cellBoard[x][y].state == 0) nextCellBoard[x][y].state = int(numberOfPolarizedCells/r1) + int(numberOfBurnedCells/r2);
+				else if((cellBoard[x][y].state > 0) && (cellBoard[x][y].state < (states -1))) nextCellBoard[x][y].state = cellBoard[x][y].k + int(degreeOfPolarization/numberOfPolarizedCells);
+				else if(cellBoard[x][y].state >= states -1) nextCellBoard[x][y].state = 0;	
       }
     }
 
     // Next is now our board
-    board = next;
+    cellBoard = nextCellBoard;
   }
 
   // This is the easy part, just draw the cells, fill 255 for '1', fill 0 for '0'
@@ -98,7 +123,8 @@ class GOL {
       for ( int j = 0; j < rows;j++) {
         //if ((board[i][j] == 1)) fill(0);
         //else fill(255); 
-				fill(board[i][j] * colorStep);			
+				//fill(board[i][j] * colorStep);			
+				fill(cellBoard[i][j].state * colorStep);			
         //stroke(0);
 				noStroke();
         rect(i*w, j*w, w, w);
@@ -120,6 +146,7 @@ class GOL {
 				//lookUpCol = (x+i)%columns <= -1 ? columns -1 : (x+i)%columns;
 				//lookUpRow = (y+j)%rows <= -1 ? rows - 1 : (y+j)%rows;
 				board[lookUpCol][lookUpRow] = 1;
+				cellBoard[lookUpCol][lookUpRow].state = states-1;
       }
     }
 	}
