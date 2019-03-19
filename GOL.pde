@@ -5,7 +5,7 @@ import java.io.*;
 
 class GOL {
 
-  int w = 30;
+  int w = 120; // era 30
   int columns, rows;
 //	An example of the application of the transition rules to one neuron. Assume
 //  that P = {0, 1, 2, 3, 4}, r 1 = 8.5, r 2 = 5.2 and k = 3.
