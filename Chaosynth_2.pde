@@ -38,6 +38,9 @@ void draw() {
 	if((frameCount % 15) == 0){
   	gol.generate();
 	}
+	//if((frameCount % 30) == 0){
+  //	gol.printAverageValues();
+	//}
 	if(keyPressed){
 		switch(key){
 			case 'r':
@@ -48,6 +51,7 @@ void draw() {
 						println("Press 'r' to restart");
 		}
 	}
+	//noLoop();
 }
 
 // reset board when mouse is pressed

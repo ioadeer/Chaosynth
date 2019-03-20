@@ -5,7 +5,7 @@ import java.io.*;
 
 class GOL {
 
-  int w = 120; // era 30
+  int w = 30; // era 30 con 40 no hay problemas con el averageValues[][]
   int columns, rows;
 //	An example of the application of the transition rules to one neuron. Assume
 //  that P = {0, 1, 2, 3, 4}, r 1 = 8.5, r 2 = 5.2 and k = 3.
@@ -16,6 +16,9 @@ class GOL {
 	float r1, r2;
 	float k; // capacitance of the nerve cell
 	int states;	
+	float wForLookUpGrid;
+	int lookUpGridXSize, lookUpGridYSize;
+	int[][] averageValues;	
 
   GOL() {
     // Initialize rows, columns and set-up arrays
@@ -23,6 +26,11 @@ class GOL {
     rows = height/w;
     board = new int[columns][rows];
 		cellBoard = new Cell[columns][rows];
+		wForLookUpGrid = 3.0;
+		lookUpGridXSize = ceil(columns/wForLookUpGrid);
+		lookUpGridYSize = ceil(rows/wForLookUpGrid);
+		averageValues = new int[lookUpGridXSize][lookUpGridYSize]; // para guardar el promedio de valores de a ventanas de 3x3 cellulas
+
 		states = 15;
 		r1 = 1.5; // 8.5
 		r2 = 2.2; // 5.2
@@ -90,6 +98,12 @@ class GOL {
           }
         }
 
+				if(x == 0 || x % 3 == 0){
+					if(y == 0 || y % 3 == 0){
+						averageValues[x/3][y/3] = degreeOfPolarization/9;							
+						//println(x+" "+y);
+					}
+				}
         // A little trick to subtract the current cell's state since
         // we added it in the above loop
         //degreeOfPolarization -= board[x][y]; 
@@ -149,6 +163,14 @@ class GOL {
 				cellBoard[lookUpCol][lookUpRow].state = states-1;
       }
     }
+	}
+	void printAverageValues(){
+
+		for(int i = 0; i < lookUpGridXSize; i++){
+			for(int j = 0; j < lookUpGridYSize; j++){
+				println(averageValues[i][j]);
+			}
+		}
 	}
 }
 
