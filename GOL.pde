@@ -19,6 +19,7 @@ class GOL {
 	float wForLookUpGrid;
 	int lookUpGridXSize, lookUpGridYSize;
 	int[][] averageValues;	
+	int[] oneDimensionalAverageValues;
 
   GOL() {
     // Initialize rows, columns and set-up arrays
@@ -30,8 +31,8 @@ class GOL {
 		lookUpGridXSize = ceil(columns/wForLookUpGrid);
 		lookUpGridYSize = ceil(rows/wForLookUpGrid);
 		averageValues = new int[lookUpGridXSize][lookUpGridYSize]; // para guardar el promedio de valores de a ventanas de 3x3 cellulas
-
-		states = 15;
+		oneDimensionalAverageValues = new int[lookUpGridXSize*lookUpGridYSize];
+		states = 10; //venia con 15
 		r1 = 1.5; // 8.5
 		r2 = 2.2; // 5.2
 		k  = 3;
@@ -132,13 +133,15 @@ class GOL {
 
   // This is the easy part, just draw the cells, fill 255 for '1', fill 0 for '0'
   void display() {
-		float colorStep = 255 / states;
+		float colorStep = 200 / states; // colores
     for ( int i = 0; i < columns;i++) {
       for ( int j = 0; j < rows;j++) {
         //if ((board[i][j] == 1)) fill(0);
         //else fill(255); 
 				//fill(board[i][j] * colorStep);			
-				fill(cellBoard[i][j].state * colorStep);			
+				//float  theStep = cellBoard[i][j].state * colorStep; 
+				fill(cellBoard[i][j].state * colorStep + 50);			
+				//fill(theStep+100, theStep+50, theStep+150);
         //stroke(0);
 				noStroke();
         rect(i*w, j*w, w, w);
@@ -168,9 +171,24 @@ class GOL {
 
 		for(int i = 0; i < lookUpGridXSize; i++){
 			for(int j = 0; j < lookUpGridYSize; j++){
-				println(averageValues[i][j]);
+				if(j == 0) println();
+				print(averageValues[i][j]);
 			}
 		}
 	}
+	void avarageValuesToOneDimension(){
+		for(int i = 0; i < lookUpGridXSize; i++){
+			for(int j = 0; j < lookUpGridYSize; j++){
+				oneDimensionalAverageValues[i*lookUpGridXSize+j] = averageValues[i][j];
+			}
+		}
+	} 
+	void printOneDimensionalAverageValues(){
+		for(int i = 0; i < lookUpGridXSize*lookUpGridYSize; i++){
+				print(oneDimensionalAverageValues[i]);
+				if((i+1) % lookUpGridXSize == 0) println();
+		}
+	}
+
 }
 

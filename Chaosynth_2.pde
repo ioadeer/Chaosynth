@@ -24,7 +24,7 @@ void setup() {
   frameRate(24);
   gol = new GOL();
 
-  cf = new ControlFrame(this, 400, 800, "Controls");
+  cf = new ControlFrame(this, 400, 400, "Controls");
   surface.setLocation(420, 10);
 }
 
@@ -47,6 +47,16 @@ void draw() {
 						//gol.init();
 						gol.initCellBoard();
 						break;
+			case 'p':
+						println("Print look up value");
+						gol.avarageValuesToOneDimension();
+						println("2d averageValues");
+						gol.printAverageValues();
+						println();
+						println("One Dimension: ");
+						gol.printOneDimensionalAverageValues();
+						println();
+						break;	
 			default:
 						println("Press 'r' to restart");
 		}
