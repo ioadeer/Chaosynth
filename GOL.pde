@@ -189,6 +189,9 @@ class GOL {
 				if((i+1) % lookUpGridXSize == 0) println();
 		}
 	}
-
+	//int[] getOneDimensionalAvarageValues(){
+	//	avarageValuesToOneDimension();	
+	//	return oneDimensionalAvarageValues;	
+	//}
 }
 

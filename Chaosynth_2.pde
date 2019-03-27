@@ -11,8 +11,13 @@
 GOL gol;
 
 import controlP5.*;
+import oscP5.*;
+import netP5.*;
 
 ControlFrame cf;
+
+NetAddress pureData; 
+OscMessage myOscMessage;
 
 void settings(){
   size(600, 600);
@@ -22,10 +27,13 @@ void setup() {
   //size(640, 360);
   //size(600, 600);
   frameRate(24);
+	myOscMessage = new OscMessage("/test");
   gol = new GOL();
 
   cf = new ControlFrame(this, 400, 400, "Controls");
   surface.setLocation(420, 10);
+
+	pureData = new NetAddress("127.0.0.1", 9000);
 }
 
 void draw() {
@@ -57,6 +65,12 @@ void draw() {
 						gol.printOneDimensionalAverageValues();
 						println();
 						break;	
+			case 's':
+						gol.avarageValuesToOneDimension();
+						myOscMessage.add(gol.oneDimensionalAverageValues);
+						OscP5.flush(myOscMessage, pureData);
+						//myOscMessage.clear();
+						myOscMessage = new OscMessage("/test");
 			default:
 						println("Press 'r' to restart");
 		}
