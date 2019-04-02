@@ -74,6 +74,14 @@ void draw() {
 			default:
 						println("Press 'r' to restart");
 		}
+	
+	}
+	if(frameCount%30 == 0){	
+		gol.avarageValuesToOneDimension();
+		myOscMessage.add(gol.oneDimensionalAverageValues);
+		OscP5.flush(myOscMessage, pureData);
+		//myOscMessage.clear();
+		myOscMessage = new OscMessage("/test");
 	}
 	//noLoop();
 }

@@ -29,7 +29,9 @@ class GOL {
 		cellBoard = new Cell[columns][rows];
 		wForLookUpGrid = 3.0;
 		lookUpGridXSize = ceil(columns/wForLookUpGrid);
+		println(lookUpGridXSize);
 		lookUpGridYSize = ceil(rows/wForLookUpGrid);
+		println(lookUpGridYSize);
 		averageValues = new int[lookUpGridXSize][lookUpGridYSize]; // para guardar el promedio de valores de a ventanas de 3x3 cellulas
 		oneDimensionalAverageValues = new int[lookUpGridXSize*lookUpGridYSize];
 		states = 10; //venia con 15
