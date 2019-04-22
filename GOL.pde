@@ -34,7 +34,7 @@ class GOL {
 		println(lookUpGridYSize);
 		averageValues = new int[lookUpGridXSize][lookUpGridYSize]; // para guardar el promedio de valores de a ventanas de 3x3 cellulas
 		oneDimensionalAverageValues = new int[lookUpGridXSize*lookUpGridYSize];
-		states = 10; //venia con 15
+		states = 10; //venia con 15 ahora con 10
 		r1 = 1.5; // 8.5
 		r2 = 2.2; // 5.2
 		k  = 3;
@@ -51,7 +51,15 @@ class GOL {
 				cellBoard[i][j] = new Cell(int(random(1,4)), int(random(states-1)));
       }
     }
-}
+	}
+	void killCellBoard(){
+
+    for (int i =0;i < columns;i++) {
+      for (int j =0;j < rows;j++) {
+				cellBoard[i][j] = new Cell(int(random(1,4)), 0);
+      }
+    }
+	}
   void init() {
     for (int i =0;i < columns;i++) {
       for (int j =0;j < rows;j++) {
@@ -135,16 +143,25 @@ class GOL {
 
   // This is the easy part, just draw the cells, fill 255 for '1', fill 0 for '0'
   void display() {
-		float colorStep = 200 / states; // colores
+		// float colorStep = 200 / states; // colores para RGB
+		// para HSB
+		colorMode(HSB, 100);
+		float hue = 50 / states;
+		float sat = 60 /states;
+		float bal = 10 / states+ 90;
     for ( int i = 0; i < columns;i++) {
       for ( int j = 0; j < rows;j++) {
         //if ((board[i][j] == 1)) fill(0);
         //else fill(255); 
 				//fill(board[i][j] * colorStep);			
 				//float  theStep = cellBoard[i][j].state * colorStep; 
-				fill(cellBoard[i][j].state * colorStep + 50);			
+				// PARA RGB
+				//fill(cellBoard[i][j].state * colorStep + 50);			
 				//fill(theStep+100, theStep+50, theStep+150);
         //stroke(0);
+				// PARA HSB
+				float tempState= cellBoard[i][j].state;
+				fill(tempState * hue + 50, tempState * sat + 40, tempState * bal); 
 				noStroke();
         rect(i*w, j*w, w, w);
       }
